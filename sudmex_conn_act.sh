@@ -1,0 +1,58 @@
+#!/bin/bash
+source $(dirname $0)/sudmex_conn_env.sh
+
+act_ntracks=2M
+sift_ntracks=200k
+mu=0.0001
+
+
+sID=$1
+
+dwis=${dir_dwis}/${sID}/dwis_du_preproc.nii.gz
+bval=${dir_dwis}/${sID}/dwis_du_preproc.bval
+bvec=${dir_dwis}/${sID}/dwis_du_preproc.bvec
+mask=${dir_dwis}/${sID}/dwi_den_unr_preproc_mask.mif
+fod=${out_dir}/${sID}/fod.mif
+
+
+if [ ! -d ${out_dir}/${sID} ]
+then
+  my_do_cmd mkdir ${out_dir}/${sID}
+fi
+
+
+aseg=${sudmex_dir}/Freesurfer/${sID}_T1w/mri/aparc+aseg.mgz
+fivett=${out_dir}/${sID}/5tt.mif
+my_do_cmd 5ttgen freesurfer \
+ -sgm_amyg_hipp \
+  $aseg \
+  $fivett
+
+gmwmi=${out_dir}/${sID}/gmwmi.mif
+my_do_cmd 5tt2gmwmi $fivett $gmwmi
+
+if [ ! -d ${out_dir}/${sID}/nobackup/ ]
+then 
+  mkdir -p ${out_dir}/${sID}/nobackup/
+fi
+
+act_tck=${out_dir}/${sID}/nobackup/act.tck
+my_do_cmd tckgen \
+  -act $fivett \
+  -seed_gmwmi $gmwmi \
+  -select $act_ntracks \
+  $fod \
+  $act_tck
+
+sift_tck=${out_dir}/${sID}/sifted.tck
+my_do_cmd tcksift \
+  -act $fivett \
+  -term_number $sift_ntracks \
+  -out_mu ${sift_tck%.tck}_mu.txt \
+  $act_tck \
+  $fod \
+  $sift_tck
+
+
+#  -term_mu $mu \
+  
