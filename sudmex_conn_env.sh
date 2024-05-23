@@ -8,8 +8,8 @@ export dir_dwis=${sudmex_dir}/dwi_preprocessed
 export out_dir=/misc/lauterbur2/lconcha/exp/SUDMEX_CONN
 
 # Tractography 
-export act_ntracks=2M
-export sift_ntracks=200k
+export act_ntracks=10M
+export sift_ntracks=500k
 export mu=0.0001
 
 
