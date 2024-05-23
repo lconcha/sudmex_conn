@@ -15,8 +15,8 @@ then
 fi
 
 out_fod_wm=${out_dir}/${sID}/wm_fod.mif
-#out_fod_gm=${out_dir}/${sID}/gm_fod.mif
-#out_fod_csf=${out_dir}/${sID}/csf_fod.mif
+out_fod_gm=${out_dir}/${sID}/gm_fod.mif
+out_fod_csf=${out_dir}/${sID}/csf_fod.mif
 
 
 if [ -f $out_fod_wm ]
@@ -41,4 +41,8 @@ my_do_cmd dwi2fod msmt_csd \
   -mask $mask \
   $dwis \
   $out_response_wm \
-  $out_fod_wm
+  $out_fod_wm \
+  $out_response_gm \
+  $out_fod_gm \
+  $out_response_csf \
+  $out_fod_csf
