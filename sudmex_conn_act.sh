@@ -8,11 +8,9 @@ mu=0.0001
 
 sID=$1
 
-dwis=${dir_dwis}/${sID}/dwis_du_preproc.nii.gz
-bval=${dir_dwis}/${sID}/dwis_du_preproc.bval
-bvec=${dir_dwis}/${sID}/dwis_du_preproc.bvec
-mask=${dir_dwis}/${sID}/dwi_den_unr_preproc_mask.mif
-fod=${out_dir}/${sID}/fod.mif
+dwis=${out_dir}/${sID}/dwis_preproc.mif
+mask=${out_dir}/${sID}/mask.mif
+fod=${out_dir}/${sID}/wm_fod.mif
 
 
 if [ ! -d ${out_dir}/${sID} ]
@@ -54,5 +52,12 @@ my_do_cmd tcksift \
   $sift_tck
 
 
-#  -term_mu $mu \
-  
+
+sift2_weights=${out_dir}/${sID}/sift2_weights.txt
+my_do_cmd tcksift2 \
+  -act $fivett \
+  -fd_scale_gm \
+  -out_mu ${out_dir}/${sID}/sift2_mu.txt \
+  $act_tck \
+  $fod \
+  $sift2_weights

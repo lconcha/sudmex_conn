@@ -2,6 +2,14 @@
 source $(dirname $0)/sudmex_conn_env.sh
 
 
+if [ "$#" -lt 2 ]
+then
+  echo "  [ERROR]. Insufficient arguments.
+  `basename $0` <sID> <atlasVersion>"
+  exit 2
+fi
+
+
 sID=$1
 labels_version=$2
 atlas=${FSLDIR}/data/standard/MNI152_T1_2mm_brain.nii.gz
@@ -66,7 +74,7 @@ else
     -p f \
     -i ["${atlas}","${t1}",0]
 fi
-
+ln -svf $atlas ${out_dir}/${sID}/atlas.nii.gz
 
 dwi_labels=${out_dir}/${sID}/dwispace_$(basename $labels_std)
 fcheck=$dwi_labels

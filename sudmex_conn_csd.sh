@@ -5,10 +5,8 @@ source $(dirname $0)/sudmex_conn_env.sh
 
 sID=$1
 
-dwis=${dir_dwis}/${sID}/dwis_du_preproc.nii.gz
-bval=${dir_dwis}/${sID}/dwis_du_preproc.bval
-bvec=${dir_dwis}/${sID}/dwis_du_preproc.bvec
-mask=${dir_dwis}/${sID}/dwi_den_unr_preproc_mask.mif
+dwis=${out_dir}/${sID}/dwis_preproc.mif
+mask=${out_dir}/${sID}/mask.mif
 
 
 if [ ! -d ${out_dir}/${sID} ]
@@ -16,27 +14,31 @@ then
   my_do_cmd mkdir ${out_dir}/${sID}
 fi
 
-out_fod=${out_dir}/${sID}/fod.mif
+out_fod_wm=${out_dir}/${sID}/wm_fod.mif
+#out_fod_gm=${out_dir}/${sID}/gm_fod.mif
+#out_fod_csf=${out_dir}/${sID}/csf_fod.mif
 
 
-if [ -f $out_fod ]
+if [ -f $out_fod_wm ]
 then
-  echo "[WARN] FOD exists: $out_fod"
+  echo "[WARN] FOD exists: $out_fod_wm"
   exit 0
 fi
 
-out_response=${out_dir}/${sID}/response.txt
-my_do_cmd dwi2response tax \
+out_response_wm=${out_dir}/${sID}/response_wm.txt
+out_response_gm=${out_dir}/${sID}/response_gm.txt
+out_response_csf=${out_dir}/${sID}/response_csf.txt
+my_do_cmd dwi2response dhollander \
   -mask $mask \
-  -fslgrad $bvec $bval \
   $dwis \
-  $out_response
+  $out_response_wm \
+  $out_response_gm \
+  $out_response_csf
 
 
 
-my_do_cmd dwi2fod csd \
+my_do_cmd dwi2fod msmt_csd \
   -mask $mask \
-  -fslgrad $bvec $bval \
   $dwis \
-  $out_response \
-  $out_fod
+  $out_response_wm \
+  $out_fod_wm
