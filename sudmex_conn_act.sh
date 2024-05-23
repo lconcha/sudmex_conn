@@ -1,9 +1,7 @@
 #!/bin/bash
 source $(dirname $0)/sudmex_conn_env.sh
 
-act_ntracks=2M
-sift_ntracks=200k
-mu=0.0001
+
 
 
 sID=$1
