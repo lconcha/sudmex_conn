@@ -2,10 +2,11 @@
 source $(dirname $0)/sudmex_conn_env.sh
 
 
+
 if [ "$#" -lt 2 ]
 then
-  echo "  [ERROR]. Insufficient arguments.
-  `basename $0` <sID> <atlasVersion>"
+  Error "Insufficient arguments.
+        `basename $0` <sID> <atlasVersion>"
   exit 2
 fi
 

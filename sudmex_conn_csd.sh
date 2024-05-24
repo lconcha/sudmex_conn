@@ -3,6 +3,7 @@ source $(dirname $0)/sudmex_conn_env.sh
 
 
 
+
 sID=$1
 
 dwis=${out_dir}/${sID}/dwis_preproc.mif
@@ -21,7 +22,7 @@ out_fod_csf=${out_dir}/${sID}/csf_fod.mif
 
 if [ -f $out_fod_wm ]
 then
-  echo "[WARN] FOD exists: $out_fod_wm"
+  Warning "FOD exists: $out_fod_wm"
   exit 0
 fi
 

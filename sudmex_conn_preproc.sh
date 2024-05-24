@@ -1,6 +1,6 @@
 #!/bin/bash
 source $(dirname $0)/sudmex_conn_env.sh
-module load singularity
+
 
 
 
@@ -25,7 +25,7 @@ shell_sizes=$(mrinfo -shell_sizes $dwis | sed 's/\s*\r*$//')
 
 if [[ ! "$shell_sizes" = "8 32 96" ]]
 then
-  echolor red "[ERROR] This is not a multi-shell acquisition. shell sizes: $shell_sizes"
+  Error "This is not a multi-shell acquisition. shell sizes: $shell_sizes"
   exit 2
 fi
 
@@ -37,7 +37,7 @@ fi
 fcheck=$dwis_denoised
 if [ -f $fcheck ]
 then
-    echolor yellow "[INFO] File exists, not overwriting: $fcheck"
+    Info " File exists, not overwriting: $fcheck"
 else
     singularity run --nv \
     -B /misc:/misc \
@@ -53,7 +53,7 @@ fi
 fcheck=$mask
 if [ -f $fcheck ]
 then
-    echolor yellow "[INFO] File exists, not overwriting: $fcheck"
+    Info " File exists, not overwriting: $fcheck"
 else
     my_do_cmd dwi2mask  $dwis_denoised  $mask
 fi
@@ -62,7 +62,7 @@ fi
 fcheck=$dwis_denoised_eddy
 if [ -f $fcheck ]
 then
-    echolor yellow "[INFO] File exists, not overwriting: $fcheck"
+    Info " File exists, not overwriting: $fcheck"
 else
     dwifslpreproc \
     -eddy_options " --cnr_maps --repol --data_is_shelled --slm=linear " \
@@ -77,7 +77,7 @@ fi
 fcheck=$dwis_denoised_eddy_biascorr
 if [ -f $fcheck ]
 then
-    echolor yellow "[INFO] File exists, not overwriting: $fcheck"
+    Info " File exists, not overwriting: $fcheck"
 else
     my_do_cmd dwibiascorrect ants \
     -mask $mask \

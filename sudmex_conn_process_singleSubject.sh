@@ -19,3 +19,6 @@ sudmex_conn_register.sh $sID $labels_version
 echolor green "connectome"
 sudmex_conn_connectome.sh $sID $labels_version
 
+# cannot do on ssh
+#sudmex_conn_qc.sh $sID $labels_version
+

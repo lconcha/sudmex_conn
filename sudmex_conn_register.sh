@@ -41,12 +41,12 @@ then
 fi
 
 
-echolor cyan "[INFO] Register t1 to dwi"
+Info "Register t1 to dwi"
 prefix=${out_dir}/${sID}/t1_to_dwi
 fcheck=${prefix}Warped.nii.gz
 if [ -f $fcheck ]
 then
-  echolor green "[INFO] File found, not overwriting: $fcheck"
+  Info "File found, not overwriting: $fcheck"
 else
     mrcalc $md 100000 -mul - | mrconvert -datatype int16 - $md_scaled
     my_do_cmd inb_synthreg.sh \
@@ -58,12 +58,12 @@ fi
 
 
 
-echolor cyan "[INFO] Register t1 to atlas"
+Info "Register t1 to atlas"
 prefix=${out_dir}/${sID}/t1_to_atlas
 fcheck=${prefix}Warped.nii.gz
 if [ -f $fcheck ]
 then
-  echolor green "[INFO] File found, not overwriting: $fcheck"
+  Info "File found, not overwriting: $fcheck"
 else
     my_do_cmd antsRegistrationSyN.sh -d 3 \
     -f "$atlas" \
@@ -80,7 +80,7 @@ dwi_labels=${out_dir}/${sID}/dwispace_$(basename $labels_std)
 fcheck=$dwi_labels
 if [ -f $fcheck ]
 then
-  echolor green "[INFO] File found, not overwriting: $fcheck"
+  Info "File found, not overwriting: $fcheck"
 else
     my_do_cmd  antsApplyTransforms \
     -d 3 \
@@ -96,13 +96,13 @@ fi
 
 
 label_max=$(awk -F, '{print $1}' $lut | sort -n | tail -n 1)
-echolor cyan "[INFO] Maximum label value is $label_max"
-echolor cyan "[INFO] Removing labels with values above $label_max"
+Info "Maximum label value is $label_max"
+Info "Removing labels with values above $label_max"
 mv -v $dwi_labels /tmp/dwi_labels_$$.nii.gz
 my_do_cmd mrcalc /tmp/dwi_labels_$$.nii.gz $label_max -le /tmp/ones_$$.mif
 my_do_cmd mrcalc /tmp/dwi_labels_$$.nii.gz /tmp/ones_$$.mif -mul $dwi_labels
 
-echolor cyan "[INFO] Check with:
+Info "Check with:
       mrview ${out_dir}/${sID}/t1_to_dwiWarped.nii.gz \
       ${out_dir}/${sID}/fa.mif \
       -overlay.load ${out_dir}/${sID}/dwispace_$(basename $labels_std) \

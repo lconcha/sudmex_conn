@@ -2,8 +2,6 @@
 source $(dirname $0)/sudmex_conn_env.sh
 
 
-
-
 sID=$1
 
 dwis=${out_dir}/${sID}/dwis_preproc.mif
