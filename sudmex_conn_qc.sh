@@ -27,6 +27,7 @@ mrconvert -datatype uint32 $labels ${tmpDir}/labels.mif
 
 my_do_cmd mrview \
   $fa \
+  -size 800,600 \
   -overlay.load $labels \
   -overlay.threshold_min 1 \
   -overlay.opacity 0.3 \
@@ -42,11 +43,12 @@ my_do_cmd mrview \
   -connectome.init ${tmpDir}/labels.mif \
   -connectome.load $connectome \
   -tractography.opacity 0 \
+  -reset \
+  -size 800,600 \
   -capture.grab \
-  -exit
-
-
+  -exit 
+  
 this_gif=${out_dir}/${sID}/qc.gif
-convert -delay 60 ${tmpDir}/*.png $this_gif
+convert -delay 30 -morph 5 ${tmpDir}/*.png $this_gif
 
 rm -fR $tmpDir
