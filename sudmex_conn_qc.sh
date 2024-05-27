@@ -13,7 +13,12 @@ fi
 
 sID=$1
 labels_version=$2
+error_log=$3
 
+if [ "$#" -lt 3 ]
+then
+  error_log=/dev/null
+fi
 
 fa=${out_dir}/${sID}/fa.mif
 labels_std=${sudmex_dir}/atlases/${labels_version}
@@ -23,6 +28,15 @@ lab=${labels_version%.nii.gz}
 tck_sifted=${out_dir}/${sID}/sifted.tck
 connectome_sift2=${out_dir}/${sID}/connectome_sift2_${lab}.csv
 connectome=${out_dir}/${sID}/connectome_${lab}.csv
+
+
+for f in $fa $labels $tck_sifted $connectome_sift2 $connectome
+do
+  if [ ! -f $f ]
+  then
+    Error "$sID  Cannot find file: $f" | tee -a $error_log
+  fi
+done
 
 
 tmpDir=$(mktemp -d)
