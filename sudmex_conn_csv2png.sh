@@ -17,4 +17,4 @@ echo "$n $n" >> $pgm
 echo $meanvalue >> $pgm
 sed 's/\.[0-9]*//g' $csv >> $pgm
 sed -i  's/,/ /g' $pgm
-convert $pgm -resize 800x800. $png
+convert $pgm -resize $geom label:"$csv"  -gravity Center -append $png
