@@ -5,19 +5,20 @@ source $(dirname $0)/sudmex_conn_env.sh
 
 
 sID=$1
+session=$2
 
-dwis=${out_dir}/${sID}/dwis_preproc.mif
-mask=${out_dir}/${sID}/mask.mif
+dwis=${dir_dwis}/${sID}/${session}/${sID}_${session}_dwi_denoised_eddy_biascorr.mif
+mask=${dir_dwis}/${sID}/${session}/mask.mif
 
 
-if [ ! -d ${out_dir}/${sID} ]
+if [ ! -d ${out_dir}/${sID}/${session} ]
 then
-  my_do_cmd mkdir ${out_dir}/${sID}
+  my_do_cmd mkdir ${out_dir}/${sID}/${session}
 fi
 
-out_fod_wm=${out_dir}/${sID}/wm_fod.mif
-out_fod_gm=${out_dir}/${sID}/gm_fod.mif
-out_fod_csf=${out_dir}/${sID}/csf_fod.mif
+out_fod_wm=${out_dir}/${sID}/${session}/wm_fod.mif
+out_fod_gm=${out_dir}/${sID}/${session}/gm_fod.mif
+out_fod_csf=${out_dir}/${sID}/${session}/csf_fod.mif
 
 
 if [ -f $out_fod_wm ]
@@ -26,9 +27,9 @@ then
   exit 0
 fi
 
-out_response_wm=${out_dir}/${sID}/response_wm.txt
-out_response_gm=${out_dir}/${sID}/response_gm.txt
-out_response_csf=${out_dir}/${sID}/response_csf.txt
+out_response_wm=${out_dir}/${sID}/${session}/response_wm.txt
+out_response_gm=${out_dir}/${sID}/${session}/response_gm.txt
+out_response_csf=${out_dir}/${sID}/${session}/response_csf.txt
 my_do_cmd dwi2response dhollander \
   -mask $mask \
   $dwis \

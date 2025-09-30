@@ -5,10 +5,10 @@ module load singularity ANTs/2.4.4 freesurfer/7.3.2 fsl/6.0.7.1 inb_tools/1.0 mr
 source `which my_do_cmd`
 
 # Files
-export sudmex_dir=/misc/tezca/egarza/SUDMEX_CONN
+export sudmex_dir=/misc/austin/jalilr2/sudmex_tms
 export SUBJECTS_DIR=${sudmex_dir}/Freesurfer
 export dir_dwis=${sudmex_dir}/dwi_preprocessed
-export out_dir=/misc/lauterbur2/lconcha/exp/SUDMEX_CONN
+export out_dir=/misc/lauterbur2/lconcha/exp/sudmex_tms
 
 # Tractography 
 export act_ntracks=10M
