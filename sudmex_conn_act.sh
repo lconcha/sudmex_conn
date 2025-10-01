@@ -11,6 +11,7 @@ act_tck=${out_dir}/${sID}/${session}/nobackup/act.tck
 sift_tck=${out_dir}/${sID}/${session}/sifted.tck
 sift2_weights=${out_dir}/${sID}/${session}/sift2_weights.txt
 
+
 if [ -f $sift2_weights ]
 then
   Warning "SIFT2 weights exists: $sift2_weights"
