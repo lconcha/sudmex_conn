@@ -25,6 +25,13 @@ echo "out_dir  : $out_dir"
 
 
 dt=${out_dir}/${sID}/${session}/dt.mif
+
+if [ -f $dt ]
+then
+  Warning "DT exists: $dt"
+  exit 0
+fi
+
 my_do_cmd $fakeflag dwi2tensor \
   -mask $mask \
   $dwis \
