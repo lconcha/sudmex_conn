@@ -1,6 +1,6 @@
 #!/bin/bash
 source $(dirname $0)/sudmex_conn_env.sh
-
+Info "Running sudmex_conn_act.sh"
 
 sID=$1
 session=$2
