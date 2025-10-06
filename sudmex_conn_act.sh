@@ -49,14 +49,14 @@ fi
 
 
 
-my_do_cmd tckgen \
+my_do_cmd time tckgen \
   -act $fivett \
   -seed_gmwmi $gmwmi \
   -select $act_ntracks \
   $fod \
   $act_tck
 
-my_do_cmd tcksift \
+my_do_cmd time tcksift \
   -act $fivett \
   -term_number $sift_ntracks \
   -out_mu ${sift_tck%.tck}_mu.txt \
@@ -64,7 +64,7 @@ my_do_cmd tcksift \
   $fod \
   $sift_tck
 
-my_do_cmd tcksift2 \
+my_do_cmd time tcksift2 \
   -act $fivett \
   -fd_scale_gm \
   -out_mu ${out_dir}/${sID}/${session}/sift2_mu.txt \
