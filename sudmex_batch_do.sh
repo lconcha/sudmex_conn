@@ -15,14 +15,29 @@ function list_sessions() {
 logdir=${out_dir}/logs
 
 
-do_this="sudmex_conn_csd.sh"
+#do_this="sudmex_conn_csd.sh"
+#do_this="sudmex_conn_freesurfer.sh"
+#logname=fs
+do_this="sudmex_conn_act.sh"
+logname=act
+nproc=24
+
+
 
 for sID in $(sudmex_conn_list_subjects.sh)
 do
     for s in $(list_sessions $sID)
     do
       session=$(basename $s)
-      #fsl_sub -N dti -s smp,14 -l $logdir \
-        $do_this $sID $session
+      fcheck=${out_dir}/${sID}/${session}/sift2_weights.txt
+      if [ -f $fcheck ]
+      then
+        Warning "SIFT2 weights exists: $fcheck"
+        continue
+      else
+        Info "Submitting $do_this for ${sID} ${session}"
+        fsl_sub -N ${logname}_${sID}_${s} -s smp,${nproc} -l $logdir \
+          $do_this $sID $session
+        fi
     done
 done
