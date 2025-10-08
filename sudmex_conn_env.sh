@@ -9,7 +9,7 @@ export sudmex_dir=/misc/austin/jalilr2/sudmex_tms
 export dir_dwis=${sudmex_dir}/dwi_preprocessed
 export out_dir=/misc/lauterbur2/lconcha/exp/sudmex_tms
 export SUBJECTS_DIR=${out_dir}/Freesurfer
-
+#export SUBJECTS_DIR=/misc/austin/jalilr2/sudmex_tms/fmriprep/sourcedata/freesurfer
 
 # Tractography 
 export act_ntracks=10M
