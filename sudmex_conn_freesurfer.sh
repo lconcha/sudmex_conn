@@ -10,11 +10,16 @@ t1=${sudmex_dir}/Bids/${sID}/${session}/anat/${sID}_${session}_T1w.nii.gz
 fakeflag=""
 
 
-if ${SUBJECTS_DIR}/${sID}_${session}/mri/aseg.mgz
+fcheck=${SUBJECTS_DIR}/${sID}_${session}/mri/aseg.mgz
+Info "Checking if Freesurfer has been run for ${sID} ${session}"
+Info "Looking for file: $fcheck"
+if [ -f $fcheck ]
 then
   Warning "Freesurfer already run for ${sID} ${session}"
   exit 0
-fi  
+else
+  Info "Running Freesurfer for ${sID} ${session}"
+fi
 
 
 
