@@ -22,7 +22,7 @@ fa=${out_dir}/${sID}/fa.mif
 md=${out_dir}/${sID}/md.mif
 md_scaled=${out_dir}/${sID}/md_scaled.nii.gz
 t1=${sudmex_dir}/Freesurfer/${sID}_T1w/mri/brain.mgz
-labels_std=${sudmex_dir}/atlases/${labels_version}
+labels_std=${out_dir}/atlases/${labels_version}
 lut=${labels_std%.nii.gz}_ref.csv
 
 isOK=1
