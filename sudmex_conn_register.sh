@@ -11,17 +11,18 @@ fi
 
 
 sID=$1
-labels_version=$2
+session=$2
+labels_version=$3
 atlas=${FSLDIR}/data/standard/MNI152_T1_2mm_brain.nii.gz
 threads=$(( $(nproc) -2))
 
 
 
 
-fa=${out_dir}/${sID}/fa.mif
-md=${out_dir}/${sID}/md.mif
-md_scaled=${out_dir}/${sID}/md_scaled.nii.gz
-t1=${sudmex_dir}/Freesurfer/${sID}_T1w/mri/brain.mgz
+fa=${out_dir}/${sID}/${session}/fa.mif
+md=${out_dir}/${sID}/${session}/md.mif
+md_scaled=${out_dir}/${sID}/${session}/md_scaled.nii.gz
+t1=${SUBJECTS_DIR}/${sID}_${session}/mri/brain.mgz
 labels_std=${out_dir}/atlases/${labels_version}
 lut=${labels_std%.nii.gz}_ref.csv
 
@@ -42,7 +43,7 @@ fi
 
 
 Info "Register t1 to dwi"
-prefix=${out_dir}/${sID}/t1_to_dwi
+prefix=${out_dir}/${sID}/${session}/t1_to_dwi
 fcheck=${prefix}Warped.nii.gz
 if [ -f $fcheck ]
 then
@@ -59,7 +60,7 @@ fi
 
 
 Info "Register t1 to atlas"
-prefix=${out_dir}/${sID}/t1_to_atlas
+prefix=${out_dir}/${sID}/${session}/t1_to_atlas
 fcheck=${prefix}Warped.nii.gz
 if [ -f $fcheck ]
 then
@@ -74,9 +75,9 @@ else
     -p f \
     -i ["${atlas}","${t1}",0]
 fi
-ln -svf $atlas ${out_dir}/${sID}/atlas.nii.gz
+ln -svf $atlas ${out_dir}/${sID}/${session}/atlas.nii.gz
 
-dwi_labels=${out_dir}/${sID}/dwispace_$(basename $labels_std)
+dwi_labels=${out_dir}/${sID}/${session}/dwispace_$(basename $labels_std)
 fcheck=$dwi_labels
 if [ -f $fcheck ]
 then
@@ -88,10 +89,10 @@ else
     -r $md_scaled \
     -o $dwi_labels \
     --interpolation NearestNeighbor \
-    -t ${out_dir}/${sID}/t1_to_dwi1Warp.nii.gz \
-    -t ${out_dir}/${sID}/t1_to_dwi0GenericAffine.mat \
-    -t ${out_dir}/${sID}/t1_to_atlas1InverseWarp.nii.gz \
-    -t [${out_dir}/${sID}/t1_to_atlas0GenericAffine.mat, 1]
+    -t ${out_dir}/${sID}/${session}/t1_to_dwi1Warp.nii.gz \
+    -t ${out_dir}/${sID}/${session}/t1_to_dwi0GenericAffine.mat \
+    -t ${out_dir}/${sID}/${session}/t1_to_atlas1InverseWarp.nii.gz \
+    -t [${out_dir}/${sID}/${session}/t1_to_atlas0GenericAffine.mat, 1]
 fi
 
 
@@ -103,8 +104,8 @@ my_do_cmd mrcalc /tmp/dwi_labels_$$.nii.gz $label_max -le /tmp/ones_$$.mif
 my_do_cmd mrcalc /tmp/dwi_labels_$$.nii.gz /tmp/ones_$$.mif -mul $dwi_labels
 
 Info "Check with:
-      mrview ${out_dir}/${sID}/t1_to_dwiWarped.nii.gz \
-      ${out_dir}/${sID}/fa.mif \
-      -overlay.load ${out_dir}/${sID}/dwispace_$(basename $labels_std) \
+      mrview ${out_dir}/${sID}/${session}/t1_to_dwiWarped.nii.gz \
+      ${out_dir}/${sID}/${session}/fa.mif \
+      -overlay.load ${out_dir}/${sID}/${session}/dwispace_$(basename $labels_std) \
       -overlay.threshold_min 1"
 
