@@ -1,20 +1,19 @@
 #!/bin/bash
 
-
 csv=$1
 png=$2
+size=$3
 
-pgm=${png%.png}.pgm
-geom="600x600"
-n=$(wc -l $csv | awk '{print $1}')
 
-maxvalue=$(sed 's/,/\n/g' $csv | sed 's/\.[0-9]*//g' | uniq | sort -n | tail -n 1)
-meanvalue=$(sed 's/,/\n/g' $csv | uniq | sort -n | awk '{a+=$1} END{print a/NR}' | sed 's/\.[0-9]*//' )
-echo "  mean value: $meanvalue ($csv)"
+if [ -z "$size" ]; then
+  size="800,600"
+fi      
 
-echo P2 > $pgm
-echo "$n $n" >> $pgm
-echo $meanvalue >> $pgm
-sed 's/\.[0-9]*//g' $csv >> $pgm
-sed -i  's/,/ /g' $pgm
-convert $pgm -resize $geom label:"$csv"  -gravity Center -append $png
+
+
+if [ -z $png ]; then
+  gnuplot -p -e "set datafile separator ','; set view map; splot '$csv' matrix with image"
+else
+  gnuplot -e \
+    "set terminal png size $size; set output '$png'; set datafile separator ','; set view map; splot '$csv' matrix with image"
+fi
