@@ -4,30 +4,56 @@ source $(dirname $0)/sudmex_conn_env.sh
 
 
 sID=$1
-labels_version=$2
+session=$2
+labels_version=$3
 
-labels=${out_dir}/${sID}/dwispace_$(basename $labels_version)
+labels=${out_dir}/${sID}/${session}/dwispace_$(basename $labels_version)
 lab=${labels_version%.nii.gz}
-fa=${out_dir}/${sID}/fa.mif
-tck=${out_dir}/${sID}/sifted.tck
-tck_act=${out_dir}/${sID}/nobackup/act.tck
+fa=${out_dir}/${sID}/${session}/fa.mif
+tck=${out_dir}/${sID}/${session}/sifted.tck
+tck_act=${out_dir}/${sID}/${session}/nobackup/act.tck
 
 
+fakeflag=""
+
+connectome=${out_dir}/${sID}/${session}/connectome_sift2_${lab}.csv
+if [ -f $connectome ]
+then
+  Warning "Connectome exists: $connectome"
+  exit 0
+fi
+
+isOK=1
+for f in $labels $fa $tck $tck_act
+do
+    if [ ! -f $f ]
+    then
+      Error "Cannot find file: $f"
+      isOK=0
+    else
+      Info "Found file: $f"
+    fi
+done
+if [ $isOK -eq 0 ]
+then
+  exit 2
+fi
 
 
-connectome=${out_dir}/${sID}/connectome_${lab}.csv
-assignments=${out_dir}/${sID}/assignments_${lab}.txt
-my_do_cmd tck2connectome \
+connectome=${out_dir}/${sID}/${session}/connectome_${lab}.csv
+assignments=${out_dir}/${sID}/${session}/assignments_${lab}.txt
+my_do_cmd $fakeflag tck2connectome \
   $tck \
   $labels \
   $connectome \
   -out_assignments $assignments
 
 
-connectome=${out_dir}/${sID}/connectome_sift2_${lab}.csv
-assignments=${out_dir}/${sID}/assignments_sift2_${lab}.txt
-sift2_weights=${out_dir}/${sID}/sift2_weights.txt
-my_do_cmd tck2connectome \
+
+connectome=${out_dir}/${sID}/${session}/connectome_sift2_${lab}.csv
+assignments=${out_dir}/${sID}/${session}/assignments_sift2_${lab}.txt
+sift2_weights=${out_dir}/${sID}/${session}/sift2_weights.txt
+my_do_cmd $fakeflag tck2connectome \
   $tck_act \
   $labels \
   $connectome \
